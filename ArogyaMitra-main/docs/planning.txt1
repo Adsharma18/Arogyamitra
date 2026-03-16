@@ -1,0 +1,422 @@
+ 2. DIRECTORY ARCHITECTURE
+ArogyaMitra/
+├── README.md
+├── .gitignore
+├── docker-compose.yml
+├── .env.example
+│
+├── backend/
+│   ├── main.py                          # FastAPI entry point
+│   ├── requirements.txt                 # Python dependencies
+│   ├── .env                             # Backend environment variables
+│   ├── Dockerfile
+│   │
+│   ├── app/
+│   │   ├── __init__.py
+│   │   ├── config.py                    # Settings & env config (Pydantic)
+│   │   ├── database.py                  # MongoDB connection (Motor async)
+│   │   │
+│   │   ├── models/                      # Pydantic schemas & DB models
+│   │   │   ├── __init__.py
+│   │   │   ├── user.py                  # User model (profile, auth)
+│   │   │   ├── workout.py               # Workout & exercise models
+│   │   │   ├── nutrition.py             # Meal plan & food models
+│   │   │   ├── health.py                # Health assessment models
+│   │   │   ├── progress.py              # Progress tracking models
+│   │   │   └── chat.py                  # AI chat history models
+│   │   │
+│   │   ├── routers/                     # API route handlers
+│   │   │   ├── __init__.py
+│   │   │   ├── auth.py                  # Login, Register, JWT
+│   │   │   ├── users.py                 # User profile CRUD
+│   │   │   ├── workouts.py              # Workout plans & exercises
+│   │   │   ├── nutrition.py             # Meal plans & recipes
+│   │   │   ├── health.py                # Health assessment & vitals
+│   │   │   ├── progress.py              # Progress & analytics
+│   │   │   ├── ai_coach.py             # AROMI AI chatbot endpoints
+│   │   │   └── calendar.py             # Google Calendar sync
+│   │   │
+│   │   ├── services/                    # Business logic layer
+│   │   │   ├── __init__.py
+│   │   │   ├── auth_service.py          # Authentication logic
+│   │   │   ├── workout_service.py       # Workout generation & management
+│   │   │   ├── nutrition_service.py     # Nutrition plan logic
+│   │   │   ├── health_service.py        # Health scoring & assessment
+│   │   │   ├── progress_service.py      # Analytics & progress calc
+│   │   │   ├── ai_coach_service.py      # AROMI AI Coach logic
+│   │   │   └── calendar_service.py      # Google Calendar integration
+│   │   │
+│   │   ├── integrations/               # External API integrations
+│   │   │   ├── __init__.py
+│   │   │   ├── groq_client.py           # Groq LLaMA-3.3-70B client
+│   │   │   ├── youtube_client.py        # YouTube Data API v3 client
+│   │   │   ├── spoonacular_client.py    # Spoonacular API client
+│   │   │   └── google_calendar.py       # Google Calendar API client
+│   │   │
+│   │   ├── middleware/                  # Custom middleware
+│   │   │   ├── __init__.py
+│   │   │   ├── auth_middleware.py       # JWT verification middleware
+│   │   │   └── cors_middleware.py       # CORS configuration
+│   │   │
+│   │   └── utils/                       # Utility functions
+│   │       ├── __init__.py
+│   │       ├── security.py              # Password hashing, JWT utils
+│   │       ├── prompts.py               # AI prompt templates
+│   │       ├── validators.py            # Input validation helpers
+│   │       └── constants.py             # App-wide constants
+│   │
+│   └── tests/                           # Backend tests
+│       ├── __init__.py
+│       ├── test_auth.py
+│       ├── test_workouts.py
+│       ├── test_nutrition.py
+│       └── test_ai_coach.py
+│
+├── frontend/
+│   ├── package.json
+│   ├── vite.config.js
+│   ├── .env                             # Frontend environment variables
+│   ├── Dockerfile
+│   ├── index.html
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   │
+│   ├── public/
+│   │   ├── favicon.ico
+│   │   ├── logo.svg
+│   │   └── assets/
+│   │       └── images/
+│   │
+│   └── src/
+│       ├── main.jsx                     # React entry point
+│       ├── App.jsx                      # Root component with routing
+│       ├── index.css                    # Global styles (Tailwind)
+│       │
+│       ├── components/                  # Reusable UI components
+│       │   ├── common/
+│       │   │   ├── Navbar.jsx
+│       │   │   ├── Sidebar.jsx
+│       │   │   ├── Footer.jsx
+│       │   │   ├── LoadingSpinner.jsx
+│       │   │   ├── ProtectedRoute.jsx
+│       │   │   ├── StatCard.jsx
+│       │   │   └── Modal.jsx
+│       │   │
+│       │   ├── dashboard/
+│       │   │   ├── FitnessOverview.jsx
+│       │   │   ├── WeeklyChart.jsx
+│       │   │   ├── CalorieTracker.jsx
+│       │   │   ├── WorkoutStreak.jsx
+│       │   │   └── QuickActions.jsx
+│       │   │
+│       │   ├── workout/
+│       │   │   ├── WorkoutCard.jsx
+│       │   │   ├── ExerciseList.jsx
+│       │   │   ├── WorkoutForm.jsx
+│       │   │   ├── VideoPlayer.jsx
+│       │   │   └── WorkoutCalendar.jsx
+│       │   │
+│       │   ├── nutrition/
+│       │   │   ├── MealCard.jsx
+│       │   │   ├── RecipeDetail.jsx
+│       │   │   ├── NutrientChart.jsx
+│       │   │   ├── MealPlanForm.jsx
+│       │   │   └── FoodSearch.jsx
+│       │   │
+│       │   ├── health/
+│       │   │   ├── HealthForm.jsx
+│       │   │   ├── BMICalculator.jsx
+│       │   │   ├── VitalsTracker.jsx
+│       │   │   └── HealthScoreCard.jsx
+│       │   │
+│       │   ├── progress/
+│       │   │   ├── ProgressChart.jsx
+│       │   │   ├── GoalTracker.jsx
+│       │   │   ├── WeightGraph.jsx
+│       │   │   └── AchievementBadge.jsx
+│       │   │
+│       │   └── ai/
+│       │       ├── AROMIChatbot.jsx     # Floating AI assistant
+│       │       ├── ChatMessage.jsx
+│       │       ├── ChatInput.jsx
+│       │       └── SuggestionChips.jsx
+│       │
+│       ├── pages/                       # Page-level components
+│       │   ├── LandingPage.jsx
+│       │   ├── LoginPage.jsx
+│       │   ├── RegisterPage.jsx
+│       │   ├── DashboardPage.jsx
+│       │   ├── WorkoutPage.jsx
+│       │   ├── NutritionPage.jsx
+│       │   ├── HealthAssessmentPage.jsx
+│       │   ├── ProgressPage.jsx
+│       │   ├── ProfilePage.jsx
+│       │   └── SettingsPage.jsx
+│       │
+│       ├── store/                       # Zustand state management
+│       │   ├── authStore.js
+│       │   ├── workoutStore.js
+│       │   ├── nutritionStore.js
+│       │   ├── healthStore.js
+│       │   ├── progressStore.js
+│       │   └── chatStore.js
+│       │
+│       ├── services/                    # API service layer
+│       │   ├── api.js                   # Axios instance & interceptors
+│       │   ├── authService.js
+│       │   ├── workoutService.js
+│       │   ├── nutritionService.js
+│       │   ├── healthService.js
+│       │   ├── progressService.js
+│       │   └── aiService.js
+│       │
+│       ├── hooks/                       # Custom React hooks
+│       │   ├── useAuth.js
+│       │   ├── useWorkout.js
+│       │   ├── useNutrition.js
+│       │   └── useChat.js
+│       │
+│       └── utils/                       # Frontend utilities
+│           ├── constants.js
+│           ├── formatters.js
+│           └── validators.js
+│
+└── docs/
+    ├── API_DOCUMENTATION.md
+    ├── SETUP_GUIDE.md
+    ├── ARCHITECTURE.md
+    └── FEATURES.md
+
+3. COMPLETE FEATURE & MODULE SPECIFICATION
+📦 MODULE 1: Authentication & User Management
+Feature	 Description	API Endpoint
+User Registration	Sign up with email, password, name, age, gender	POST /api/auth/register
+User Login	JWT-based login with access + refresh tokens	POST /api/auth/login
+Token Refresh	Auto-refresh expired access tokens	POST /api/auth/refresh
+Password Reset	Email-based password reset flow	POST /api/auth/reset-password
+Profile Setup	Onboarding: height, weight, goals, dietary prefs, medical conditions	PUT /api/users/profile
+Profile View	Get current user's complete profile	GET /api/users/me
+Avatar Upload	Profile picture upload	POST /api/users/avatar
+
+MODULE 2: AI Workout Planning
+Feature	Description	API Endpoint
+Generate Workout Plan	AI generates personalized weekly plan via Groq LLaMA-3.3-70B	POST /api/workouts/generate
+Get Today's Workout	Fetch today's scheduled workout	GET /api/workouts/today
+List All Plans	View all saved workout plans	GET /api/workouts/plans
+Get Workout Detail	View specific workout with exercises	GET /api/workouts/plans/{id}
+Log Workout	Mark workout as complete, log reps/sets/weight	POST /api/workouts/log
+Exercise Videos	Fetch YouTube exercise demo videos	GET /api/workouts/videos/{exercise}
+Custom Workout	Create custom workout manually	POST /api/workouts/custom
+Sync to Calendar	Push workout schedule to Google Calendar	POST /api/workouts/sync-calendar
+
+ MODULE 3: AI Nutrition Guidance
+Feature	Description	API Endpoint
+Generate Meal Plan	AI + Spoonacular generated meal plan based on goals/diet	POST /api/nutrition/generate
+Get Today's Meals	Fetch today's meal recommendations	GET /api/nutrition/today
+Search Recipes	Search recipes by name, ingredient, or diet type	GET /api/nutrition/recipes/search
+Recipe Detail	Full recipe with nutrition breakdown	GET /api/nutrition/recipes/{id}
+Log Meal	Log what the user ate with calorie tracking	POST /api/nutrition/log
+Nutrition Summary	Daily/weekly calorie & macro summary	GET /api/nutrition/summary
+Water Tracking	Log daily water intake	POST /api/nutrition/water
+Get Alternatives	AI suggests food alternatives	POST /api/nutrition/alternatives
+
+MODULE 4: Health Assessment & Vitals
+Feature	Description	API Endpoint
+Health Assessment	Comprehensive questionnaire (BMI, lifestyle, stress, sleep)	POST /api/health/assessment
+Health Score	AI-calculated health score (0-100)	GET /api/health/score
+BMI Calculator	Calculate BMI with categorization	POST /api/health/bmi
+Log Vitals	Record BP, heart rate, blood sugar, sleep hours	POST /api/health/vitals
+Vitals History	View vitals trend over time	GET /api/health/vitals/history
+Health Recommendations	AI-generated health tips based on profile	GET /api/health/recommendations
+Risk Assessment	AI assesses health risks from data	POST /api/health/risk-assessment
+
+MODULE 5: Progress Tracking & Analytics
+Feature	Description	API Endpoint
+Dashboard Overview	Aggregated fitness stats (weekly/monthly)	GET /api/progress/dashboard
+Weight Trend	Weight change graph over time	GET /api/progress/weight
+Workout Analytics	Workout frequency, volume, streak	GET /api/progress/workouts
+Nutrition Analytics	Calorie/macro tracking over time	GET /api/progress/nutrition
+Goals Management	Set, update, track fitness goals	POST/GET /api/progress/goals
+Achievements	Unlock badges for milestones	GET /api/progress/achievements
+Weekly Report	AI-generated weekly progress summary	GET /api/progress/weekly-report
+
+MODULE 6: AROMI AI Health Coach (Floating Chatbot)
+Feature	Description	API Endpoint
+Chat with AROMI	Real-time AI conversation via Groq LLaMA-3.3-70B	POST /api/ai/chat
+Context-Aware	AROMI knows user's profile, history, and goals	(Auto-injected)
+Quick Suggestions	Pre-built chips: "Suggest a workout", "What should I eat?"	(Frontend)
+Chat History	Persistent conversation storage	GET /api/ai/history
+Clear Chat	Clear conversation history	DELETE /api/ai/history
+Adaptive Coaching	Adjusts tone/advice based on progress and mood	(AI logic)
+
+AI System Prompt Template:
+You are AROMI, an AI Health Coach for ArogyaMitra. You provide personalized 
+fitness, nutrition, and wellness guidance. You are empathetic, motivating, 
+and evidence-based.
+
+User Profile:
+- Name: {name}, Age: {age}, Gender: {gender}
+- Height: {height}cm, Weight: {weight}kg, BMI: {bmi}
+- Goal: {goal}, Activity Level: {activity_level}
+- Dietary Preference: {diet}, Allergies: {allergies}
+- Medical Conditions: {conditions}
+
+Recent Activity:
+- Last workout: {last_workout}
+- Workout streak: {streak} days
+- Average calories/day: {avg_calories}
+- Health score: {health_score}/100
+
+Guidelines:
+- Always consider medical conditions and allergies
+- Provide actionable, specific advice
+- Encourage consistency and celebrate progress
+- Never provide medical diagnoses - suggest consulting a doctor when needed
+- Use a warm, supportive tone
+
+MODULE 7: External API Integrations
+Integration	Purpose	Key Features
+Groq LLaMA-3.3-70B	AI brain for all intelligent features	Workout generation, meal planning, health coaching, recommendations
+YouTube Data API v3	Exercise video tutorials	Search exercise demos, embed videos in workout cards
+Spoonacular API	Nutrition & recipe database	Recipe search, nutrition info, meal planning, food alternatives
+Google Calendar API	Schedule syncing	Push workout schedules to user's Google Calendar
+
+5. TECH STACK DETAILS
+Component	Technology	Version	Purpose
+Backend Framework	FastAPI	0.109+	Async REST API
+Python	Python	3.11+	Backend language
+Database	MongoDB	7.0+	Document store
+ODM	Motor (async)	3.3+	Async MongoDB driver
+Auth	JWT (python-jose)	-	Token-based auth
+Password	passlib[bcrypt]	-	Password hashing
+AI	Groq SDK	Latest	LLaMA-3.3-70B access
+Validation	Pydantic v2	2.5+	Data validation
+Frontend	React.js	18+	UI framework
+Build Tool	Vite	5+	Fast dev server
+Styling	Tailwind CSS	3.4+	Utility-first CSS
+UI Library	shadcn/ui + Lucide	Latest	Component library
+Charts	Recharts	2.10+	Data visualization
+State	Zustand	4.5+	State management
+HTTP	Axios	1.6+	API requests
+Routing	React Router v6	6.21+	Client-side routing
+Notifications	React Hot Toast	2.4+	Toast notifications
+Containerization	Docker + Compose	Latest	Deployment
+📋 6. STEP-BY-STEP EXECUTION PLAN
+🔷 EPIC 1: Project Setup & Configuration 
+Step	Task	Details
+1.1	Initialize Backend	Create backend/ folder, set up virtual env, install FastAPI, Motor, Groq SDK, python-jose, passlib, httpx
+1.2	Initialize Frontend	npm create vite@latest frontend -- --template react, install Tailwind, Zustand, Axios, React Router, Recharts, Lucide
+1.3	Configure .env files	Set up backend & frontend env files with API keys
+1.4	MongoDB Setup	Install MongoDB locally or use Atlas, create arogyamitra database
+1.5	Docker Setup	Create Dockerfiles for backend & frontend, docker-compose.yml
+1.6	Test Setup	Run both servers, verify connectivity, test MongoDB connection
+🔷 EPIC 2: Backend API Development 
+Step	Task	Details
+2.1	Database Layer	database.py with Motor async client, connection pooling
+2.2	Auth System	Registration, login, JWT generation, middleware, password hashing
+2.3	User Router	Profile CRUD, onboarding endpoint, avatar upload
+2.4	Pydantic Models	All request/response schemas for every module
+2.5	Workout Router	Generate plan, log workout, get plans, today's workout
+2.6	Nutrition Router	Generate meal plan, log meal, search recipes, water tracking
+2.7	Health Router	Assessment, BMI calc, vitals logging, health score
+2.8	Progress Router	Dashboard data, weight trend, goals, achievements
+2.9	Service Layer	Business logic for all routers (workout_service, nutrition_service, etc.)
+2.10	Error Handling	Global exception handlers, validation error responses
+EPIC 3: AI Integration & External APIs 
+Step	Task	Details
+3.1	Groq Client	Initialize Groq SDK, create reusable client with error handling & retry
+3.2	AI Prompts	Craft system prompts for workout generation, meal planning, coaching
+3.3	Workout AI	Connect Groq to generate personalized workout plans from user profile
+3.4	Nutrition AI	AI-powered meal plans considering diet, allergies, goals
+3.5	AROMI Coach	Context-aware chatbot: inject user profile + history into each prompt
+3.6	YouTube Integration	Search exercise videos, return top 3 results per exercise
+3.7	Spoonacular Integration	Recipe search, nutrition lookup, meal plan enrichment
+3.8	Google Calendar	OAuth2 flow, push workout events to user's calendar
+3.9	Health AI	AI-generated health recommendations and risk assessments
+3.10	Weekly Report AI	Auto-generate weekly summary using progress data
+🔷 EPIC 4: Frontend Development 
+Step	Task	Details
+4.1	Layout & Navigation	Navbar, Sidebar, responsive layout, routing setup
+4.2	Landing Page	Hero section, features showcase, CTA buttons
+4.3	Auth Pages	Login & Register pages with form validation
+4.4	Dashboard Page	Overview cards, weekly chart, calorie tracker, streak counter, quick actions
+4.5	Workout Page	Workout plan display, exercise cards with videos, log form, calendar view
+4.6	Nutrition Page	Meal plan display, recipe search, meal logger, nutrient charts
+4.7	Health Assessment Page	Multi-step health form, BMI calculator, vitals logger, health score display
+4.8	Progress Page	Weight graph, workout analytics, goal tracker, achievements
+4.9	Profile & Settings	Edit profile, change password, notification prefs, API key management
+4.10	AROMI Chatbot	Floating chat widget (bottom-right), message bubbles, suggestion chips, typing indicator
+4.11	Zustand Stores	Auth store, workout store, nutrition store, health store, progress store, chat store
+4.12	API Service Layer	Axios instance with interceptors, auth header injection, auto token refresh
+4.13	Responsive Design	Mobile-first approach, tablet & desktop layouts
+🔷 EPIC 5: Integration, Testing & Polish 
+Step	Task	Details
+5.1	End-to-End Integration	Connect all frontend pages to backend APIs
+5.2	Error Handling UI	Error boundaries, toast notifications, loading states
+5.3	Backend Tests	pytest for auth, workouts, nutrition, AI endpoints
+5.4	Frontend Testing	Component testing with Vitest
+5.5	Performance	Lazy loading, code splitting, image optimization
+5.6	Security Audit	CORS, rate limiting, input sanitization, env variable checks
+5.7	Documentation	README, API docs, setup guide
+5.8	Docker Deployment	Final docker-compose with all services
+
+🚀 7. API ENDPOINT SUMMARY
+Method	Endpoint	Module	Auth
+POST	/api/auth/register	Auth	❌
+POST	/api/auth/login	Auth	❌
+POST	/api/auth/refresh	Auth	✅
+POST	/api/auth/reset-password	Auth	❌
+GET	/api/users/me	Users	✅
+PUT	/api/users/profile	Users	✅
+POST	/api/users/avatar	Users	✅
+POST	/api/workouts/generate	Workouts	✅
+GET	/api/workouts/today	Workouts	✅
+GET	/api/workouts/plans	Workouts	✅
+GET	/api/workouts/plans/{id}	Workouts	✅
+POST	/api/workouts/log	Workouts	✅
+POST	/api/workouts/custom	Workouts	✅
+GET	/api/workouts/videos/{exercise}	Workouts	✅
+POST	/api/workouts/sync-calendar	Workouts	✅
+POST	/api/nutrition/generate	Nutrition	✅
+GET	/api/nutrition/today	Nutrition	✅
+GET	/api/nutrition/recipes/search	Nutrition	✅
+GET	/api/nutrition/recipes/{id}	Nutrition	✅
+POST	/api/nutrition/log	Nutrition	✅
+GET	/api/nutrition/summary	Nutrition	✅
+POST	/api/nutrition/water	Nutrition	✅
+POST	/api/nutrition/alternatives	Nutrition	✅
+POST	/api/health/assessment	Health	✅
+GET	/api/health/score	Health	✅
+POST	/api/health/bmi	Health	✅
+POST	/api/health/vitals	Health	✅
+GET	/api/health/vitals/history	Health	✅
+GET	/api/health/recommendations	Health	✅
+POST	/api/health/risk-assessment	Health	✅
+GET	/api/progress/dashboard	Progress	✅
+GET	/api/progress/weight	Progress	✅
+GET	/api/progress/workouts	Progress	✅
+GET	/api/progress/nutrition	Progress	✅
+POST/GET	/api/progress/goals	Progress	✅
+GET	/api/progress/achievements	Progress	✅
+GET	/api/progress/weekly-report	Progress	✅
+POST	/api/ai/chat	AI Coach	✅
+GET	/api/ai/history	AI Coach	✅
+DELETE	/api/ai/history	AI Coach	✅
+GET	/api/calendar/auth	Calendar	✅
+GET	/api/calendar/callback	Calendar	✅
+Total: 38 API endpoints across 7 modules
+
+📊 8. FRONTEND PAGE MAP
+Code
+/                       → LandingPage (public)
+/login                  → LoginPage (public)
+/register               → RegisterPage (public)
+/dashboard              → DashboardPage (protected)
+/workouts               → WorkoutPage (protected)
+/workouts/:id           → WorkoutDetailPage (protected)
+/nutrition              → NutritionPage (protected)
+/nutrition/recipe/:id   → RecipeDetailPage (protected)
+/health                 → HealthAssessmentPage (protected)
+/progress               → ProgressPage (protected)
+/profile                → ProfilePage (protected)
+/settings               → SettingsPage (protected)
