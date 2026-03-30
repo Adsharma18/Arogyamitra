@@ -257,4 +257,4 @@ This project is for educational and portfolio purposes.
 
 ---
 
-**Built with ❤️ by [Ashish](https://github.com/A2-ashish)**
+**Built with ❤️ by [Aditi](https://github.com/Adsharma18/Arogyamitra)**
